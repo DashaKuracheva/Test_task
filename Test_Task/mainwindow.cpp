@@ -9,21 +9,19 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent)
     //формирование горизонтального слоя
     mainLayout = new QHBoxLayout(centralWidget);
     mainLayout->setContentsMargins(50, 50, 50, 50);
-    mainLayout->setSpacing(100);
-
+    mainLayout->setSpacing(50);
 
     //левая часть
     listWidget = new QListWidget(this);
     QFont font = listWidget->font();
     font.setPointSize(14);
     listWidget->setFont(font);
-
     listWidget->setStyleSheet(
-            "QListWidget::item:selected {"
-            "background-color: grey;"
-            "color: white;"
-            "}"
-        );
+            "QListWidget { border: 1px solid #000000; background-color: #e6f8df; border-radius: 6px; outline: 0;  }"
+            "QListWidget::item { border: 1px solid transparent; padding-top: 12px; padding-bottom: 12px; padding-left: 35px; color: black; font-size: 16px; }"
+            "QListWidget::item:selected { border: 1px solid #000000; border-radius: 8px; background-color: grey; color: white; padding-top: 12px; padding-bottom: 12px; padding-left: 35px; font-size: 20px;}" );
+
+    listWidget->setSpacing(5);
 
     item1 = new QListWidgetItem(QIcon(":/new/prefix1/home.png"), "Главная");
     listWidget->addItem(item1);
@@ -39,21 +37,25 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent)
     //правая чассть
     stackedWidget = new QStackedWidget(this);
     page1 = new QLabel("<h1>Контент 1</h1>", this); page1->setAlignment(Qt::AlignCenter);
-    page2 = new QLabel("<h1>Контент 2</h1>", this); page2->setAlignment(Qt::AlignCenter);
+    CongigPage = new CongigWindow(this);
     page3 = new QLabel("<h1>Контент 3</h1>", this); page3->setAlignment(Qt::AlignCenter);
     page4 = new QLabel("<h1>Контент 4</h1>", this); page4->setAlignment(Qt::AlignCenter);
     page5 = new QLabel("<h1>Контент 5</h1>", this); page5->setAlignment(Qt::AlignCenter);
+
     stackedWidget->addWidget(page1);
-    stackedWidget->addWidget(page2);
+    //stackedWidget->addWidget(homePage);
+    stackedWidget->addWidget(CongigPage);
     stackedWidget->addWidget(page3);
     stackedWidget->addWidget(page4);
     stackedWidget->addWidget(page5);
 
-    mainLayout->addWidget(listWidget, 1);
-    mainLayout->addWidget(stackedWidget, 4);
+    mainLayout->addWidget(listWidget);
+    mainLayout->addWidget(stackedWidget);
+    listWidget->setFixedWidth(450);
 
     connect(listWidget, SIGNAL(currentRowChanged(int)), stackedWidget, SLOT(setCurrentIndex(int)));
     listWidget->setCurrentRow(0);
+
 }
 
 MainWindow::~MainWindow(){};

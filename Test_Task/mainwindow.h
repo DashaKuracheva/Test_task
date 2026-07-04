@@ -2,8 +2,7 @@
 #define MAINWINDOW_H
 
 #include <QtWidgets>
-#include <QDockWidget>
-
+#include "configuration.h"
 
 class MainWindow : public QMainWindow
 {
@@ -21,6 +20,6 @@ private:
      QListWidgetItem *item1, *item2, *item3, *item4, *item5;
      QStackedWidget *stackedWidget;
 
-
+     CongigWindow *CongigPage;
 };
 #endif // MAINWINDOW_H
