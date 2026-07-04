@@ -13,9 +13,17 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent)
 
 
     //левая часть
-    id = new QLabel("ID станции:");
-
     listWidget = new QListWidget(this);
+    QFont font = listWidget->font();
+    font.setPointSize(14);
+    listWidget->setFont(font);
+
+    listWidget->setStyleSheet(
+            "QListWidget::item:selected {"
+            "background-color: grey;"
+            "color: white;"
+            "}"
+        );
 
     item1 = new QListWidgetItem(QIcon(":/new/prefix1/home.png"), "Главная");
     listWidget->addItem(item1);
@@ -32,9 +40,9 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent)
     stackedWidget = new QStackedWidget(this);
     page1 = new QLabel("<h1>Контент 1</h1>", this); page1->setAlignment(Qt::AlignCenter);
     page2 = new QLabel("<h1>Контент 2</h1>", this); page2->setAlignment(Qt::AlignCenter);
-    page3 = new QLabel("<h1>Контент 3</h1>", this); page1->setAlignment(Qt::AlignCenter);
-    page4 = new QLabel("<h1>Контент 4</h1>", this); page2->setAlignment(Qt::AlignCenter);
-    page5 = new QLabel("<h1>Контент 5</h1>", this); page1->setAlignment(Qt::AlignCenter);
+    page3 = new QLabel("<h1>Контент 3</h1>", this); page3->setAlignment(Qt::AlignCenter);
+    page4 = new QLabel("<h1>Контент 4</h1>", this); page4->setAlignment(Qt::AlignCenter);
+    page5 = new QLabel("<h1>Контент 5</h1>", this); page5->setAlignment(Qt::AlignCenter);
     stackedWidget->addWidget(page1);
     stackedWidget->addWidget(page2);
     stackedWidget->addWidget(page3);
@@ -44,7 +52,7 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent)
     mainLayout->addWidget(listWidget, 1);
     mainLayout->addWidget(stackedWidget, 4);
 
-    connect(listWidget, &QListWidget::currentRowChanged, stackedWidget, &QStackedWidget::setCurrentIndex);
+    connect(listWidget, SIGNAL(currentRowChanged(int)), stackedWidget, SLOT(setCurrentIndex(int)));
     listWidget->setCurrentRow(0);
 }
 
