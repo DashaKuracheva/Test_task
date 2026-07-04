@@ -9,9 +9,17 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent)
     //формирование горизонтального слоя
     mainLayout = new QHBoxLayout(centralWidget);
     mainLayout->setContentsMargins(50, 50, 50, 50);
-    mainLayout->setSpacing(50);
+    mainLayout->setSpacing(30);
 
     //левая часть
+    idInfo = new QLabel("ID станции:", this);
+    idInfo->setWordWrap(true);
+    idInfo->setStyleSheet("QLabel {font-size: 36px}");
+
+    InfoLayout = new QVBoxLayout();
+    InfoLayout->setSpacing(10);
+    InfoLayout->addWidget(idInfo);
+
     listWidget = new QListWidget(this);
     QFont font = listWidget->font();
     font.setPointSize(14);
@@ -34,6 +42,8 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent)
     item5 = new QListWidgetItem(QIcon(":/new/prefix1/analytics.png"), "Аналитика");
     listWidget->addItem(item5);
 
+    InfoLayout->addWidget(listWidget);
+
     //правая чассть
     stackedWidget = new QStackedWidget(this);
     page1 = new QLabel("<h1>Контент 1</h1>", this); page1->setAlignment(Qt::AlignCenter);
@@ -49,13 +59,25 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent)
     stackedWidget->addWidget(page4);
     stackedWidget->addWidget(page5);
 
-    mainLayout->addWidget(listWidget);
+    mainLayout->addLayout(InfoLayout);
     mainLayout->addWidget(stackedWidget);
     listWidget->setFixedWidth(450);
 
     connect(listWidget, SIGNAL(currentRowChanged(int)), stackedWidget, SLOT(setCurrentIndex(int)));
     listWidget->setCurrentRow(0);
 
+    connect(CongigPage->idLineEdit(), SIGNAL(textChanged(QString)), this, SLOT(updateInfo()));
+    updateInfo();
 }
 
 MainWindow::~MainWindow(){};
+
+void MainWindow::updateInfo()
+{
+    QString id = CongigPage->stationId();
+    QString displayId = id.isEmpty() ? "—" : id;
+
+    idInfo->setText(QString("<span style='color:#000000;'>ID станции: </span>"
+                            "<span style='color:#a80d22;font-weight: bold '>%1</span>").arg(displayId));
+}
+

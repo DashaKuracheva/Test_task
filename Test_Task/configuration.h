@@ -2,6 +2,13 @@
 #define CONFIGURATION_H
 
 #include <QtWidgets>
+#include <QJsonDocument>
+#include <QJsonObject>
+#include <QFile>
+#include <QStandardPaths>
+#include <QDir>
+#include <QMessageBox>
+#include <QFileDialog>
 
 class CongigWindow : public QWidget
 {
@@ -10,6 +17,9 @@ class CongigWindow : public QWidget
 public:
     CongigWindow(QWidget *parent = nullptr);
     ~CongigWindow();
+    QString stationId() const { return edtID->text(); }
+    QLineEdit* idLineEdit() const { return edtID; }
+
 
 private:
      QWidget* createCardWidget();
@@ -46,7 +56,12 @@ private:
      QButtonGroup *group;
      QComboBox *internetBox, *regimeBox;
      QPushButton *save,*load;
+     QCheckBox *power, *cable,*debug, *on, *counterOn, *door, *stop, *current;
 
+
+private slots:
+     void onSave();
+     void onLoad();
 };
 
 #endif // CONFIGURATION_H

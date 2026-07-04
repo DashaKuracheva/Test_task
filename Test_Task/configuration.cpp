@@ -163,7 +163,8 @@ CongigWindow::CongigWindow(QWidget *parent) : QWidget(parent) {
     edtConnector->setValue(1);
     crd4->addWidget(edtConnector);
 
-    crd4->addWidget(new QCheckBox("Динамическое распределение мощности"));
+    power = new QCheckBox("Динамическое распределение мощности");
+    crd4->addWidget(power);
 
     regime = new QLabel("Режим работы станции");
     crd4->addWidget(regime);
@@ -172,8 +173,10 @@ CongigWindow::CongigWindow(QWidget *parent) : QWidget(parent) {
     regimeBox->addItems({"Продакшн","Тест"});
     crd4->addWidget(regimeBox);
 
-    crd4->addWidget(new QCheckBox("Режим отладки (эмулятор тока счётчика)"));
-    crd4->addWidget(new QCheckBox("Кабельная сборка (кабель постоянно в станции)"));
+    debug = new QCheckBox("Режим отладки (эмулятор тока счётчика)");
+    crd4->addWidget(debug);
+    cable = new QCheckBox("Кабельная сборка (кабель постоянно в станции)");
+    crd4->addWidget(cable);
     crd4->addStretch();
 
     //РЯД 2. Настройки коннекторов
@@ -196,7 +199,8 @@ CongigWindow::CongigWindow(QWidget *parent) : QWidget(parent) {
     lblConnector->setStyleSheet("font-weight: bold; font-size: 30px; border-bottom: 2px solid black; padding-bottom: 4px; margin-bottom: 8px;");
     Vconnector->addWidget(lblConnector);
 
-    Vconnector->addWidget(new QCheckBox("Включен"));
+    on = new QCheckBox("Включен");
+    Vconnector->addWidget(on);
 
     modbus = new QLabel("Modbus адрес счётчика");
     Vconnector->addWidget(modbus);
@@ -205,7 +209,8 @@ CongigWindow::CongigWindow(QWidget *parent) : QWidget(parent) {
     edtModbus->setValue(0);
     Vconnector->addWidget(edtModbus);
 
-    Vconnector->addWidget(new QCheckBox("Счётчик включен"));
+    counterOn = new QCheckBox("Счётчик включен");
+    Vconnector->addWidget(counterOn);
 
     interval = new QLabel("Интервал опроса (мс)");
     Vconnector->addWidget(interval);
@@ -259,9 +264,12 @@ CongigWindow::CongigWindow(QWidget *parent) : QWidget(parent) {
     edtCount = new QComboBox();
     edtCount->addItems({"Гран Электро", "CE318BY (SMP)", "CE301BY (ГОСТ 61107)"});
     crd7->addWidget(edtCount);
-    crd7->addWidget(new QCheckBox("Состояние двери"));
-    crd7->addWidget(new QCheckBox("Аварийный СТОП"));
-    crd7->addWidget(new QCheckBox("Датчик утечки тока (R01)"));
+    door = new QCheckBox("Состояние двери");
+    crd7->addWidget(door);
+    stop = new QCheckBox("Аварийный СТОП");
+    crd7->addWidget(stop);
+    current = new QCheckBox("Датчик утечки тока (R01)");
+    crd7->addWidget(current);
     crd7->addStretch();
 
     row3Layout->addWidget(card6, 1);
@@ -286,6 +294,8 @@ CongigWindow::CongigWindow(QWidget *parent) : QWidget(parent) {
 
     btnLayout->addWidget(save);
     btnLayout->addWidget(load);
+    connect(save, SIGNAL(clicked()), this, SLOT(onSave()));
+    connect(load, SIGNAL(clicked()), this, SLOT(onLoad()));
 
     configLayout->addLayout(btnLayout);
 
@@ -310,4 +320,185 @@ QWidget* CongigWindow::createCardWidget()
     return card;
 }
 
+void CongigWindow::onSave()
+{
+    QJsonObject root;
 
+    //Сетевой интерфейс
+    QJsonObject network;
+    network["interface"] = g3->isChecked() ? "3G модем" : (lan->isChecked() ? "LAN" : "");
+    network["defaultInternet"] = internetBox->currentText();
+    network["wifiSSID"] = EDTwifiSSID->text();
+    network["wifiPASS"] = EDTwifiPASS->text();
+    root["network"] = network;
+
+    //Станция
+    QJsonObject station;
+    station["id"] = edtID->text();
+    station["serialNumber"] = edtSerialNum->text();
+    station["rowNumber"] = edtRowNum->text();
+    station["place"] = edtPlace->text();
+    root["station"] = station;
+
+    //Соединение
+    QJsonObject connection;
+    connection["ocppServer"] = edtServer->text();
+    connection["apn"] = edtApn->text();
+    connection["pin"] = edtPin->text();
+    root["connection"] = connection;
+
+    //Лимиты и коннекторы
+    QJsonObject limits;
+    limits["currentLimitA"] = edtLim->value();
+    limits["connectorCount"] = edtConnector->value();
+    limits["dynamicPowerDistribution"] = power->isChecked();
+    limits["mode"] = regimeBox->currentText();
+    limits["debugMode"] = debug->isChecked();
+    limits["cablePermanentlyAttached"] = cable->isChecked();
+    root["limits"] = limits;
+
+    //Настройки
+    QJsonObject connector1;
+    connector1["enabled"] = on->isChecked();
+    connector1["modbusAddress"] = edtModbus->value();
+    connector1["meterEnabled"] = counterOn->isChecked();
+    connector1["pollIntervalMs"] = edtInterval->value();
+    root["connector1"] = connector1;
+
+    //RGB
+    QJsonObject rgb;
+    rgb["currentLedCount"] = edtKol->value();
+    rgb["maxLedCount"] = edtMaxKol->value();
+    root["rgb"] = rgb;
+
+    //Вкл/выкл функций
+    QJsonObject features;
+    features["meterType"] = edtCount->currentText();
+    features["doorState"] = door->isChecked();
+    features["emergencyStop"] = stop->isChecked();
+    features["leakSensorR01"] = current->isChecked();
+    root["features"] = features;
+
+    //Запись в файл
+    QString defaultDir = QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation);
+    QString defaultPath = defaultDir + "/config.json";
+
+    QString filePath = QFileDialog::getSaveFileName(this, "Сохранить конфигурацию",defaultPath,"JSON файлы (*.json);;Все файлы (*)" );
+
+        if (filePath.isEmpty()) {
+            // Пользователь отменил диалог
+            return;
+        }
+
+        if (!filePath.endsWith(".json", Qt::CaseInsensitive)) {
+            filePath += ".json";
+        }
+
+        QFile file(filePath);
+        if (!file.open(QIODevice::WriteOnly | QIODevice::Text)) {
+            QMessageBox::warning(this, "Ошибка", "Не удалось открыть файл для записи:\n" + filePath);
+            return;
+        }
+
+        QJsonDocument doc(root);
+        file.write(doc.toJson(QJsonDocument::Indented));
+        file.close();
+
+        QMessageBox::information(this, "Сохранено", "Конфигурация сохранена:\n" + filePath);
+}
+
+void CongigWindow::onLoad()
+{
+    QString defaultDir = QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation);
+
+    QString filePath = QFileDialog::getOpenFileName(this, "Загрузить конфигурацию",defaultDir,"JSON файлы (*.json);;Все файлы (*)");
+
+    if (filePath.isEmpty()) {
+        // Пользователь отменил диалог
+        return;
+    }
+
+    QFile file(filePath);
+    if (!file.exists()) {
+        QMessageBox::warning(this, "Ошибка", "Файл конфигурации не найден:\n" + filePath);
+        return;
+    }
+
+    if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+        QMessageBox::warning(this, "Ошибка", "Не удалось открыть файл для чтения:\n" + filePath);
+        return;
+    }
+
+    QByteArray data = file.readAll();
+    file.close();
+
+    QJsonParseError parseError;
+    QJsonDocument doc = QJsonDocument::fromJson(data, &parseError);
+
+    if (parseError.error != QJsonParseError::NoError) {
+        QMessageBox::warning(this, "Ошибка", "Ошибка разбора JSON:\n" + parseError.errorString());
+        return;
+    }
+
+    if (!doc.isObject()) {
+        QMessageBox::warning(this, "Ошибка", "Некорректный формат файла конфигурации");
+        return;
+    }
+
+    QJsonObject root = doc.object();
+
+    //Сетевой интерфейс
+    QJsonObject network = root["network"].toObject();
+    QString iface = network["interface"].toString();
+    if (iface == "3G модем") {
+        g3->setChecked(true);
+    } else if (iface == "LAN") {
+        lan->setChecked(true);
+    }
+    internetBox->setCurrentText(network["defaultInternet"].toString());
+    EDTwifiSSID->setText(network["wifiSSID"].toString());
+    EDTwifiPASS->setText(network["wifiPASS"].toString());
+
+    //Станция
+    QJsonObject station = root["station"].toObject();
+    edtID->setText(station["id"].toString());
+    edtSerialNum->setText(station["serialNumber"].toString());
+    edtRowNum->setText(station["rowNumber"].toString());
+    edtPlace->setText(station["place"].toString());
+
+    //Соединение
+    QJsonObject connection = root["connection"].toObject();
+    edtServer->setText(connection["ocppServer"].toString());
+    edtApn->setText(connection["apn"].toString());
+    edtPin->setText(connection["pin"].toString());
+
+    //Лимиты и коннекторы
+    QJsonObject limits = root["limits"].toObject();
+    edtLim->setValue(limits["currentLimitA"].toInt());
+    edtConnector->setValue(limits["connectorCount"].toInt());
+    power->setChecked(limits["dynamicPowerDistribution"].toBool());
+    regimeBox->setCurrentText(limits["mode"].toString());
+    debug->setChecked(limits["debugMode"].toBool());
+    cable->setChecked(limits["cablePermanentlyAttached"].toBool());
+
+    //Настройки
+    QJsonObject connector1 = root["connector1"].toObject();
+    on->setChecked(connector1["enabled"].toBool());
+    edtModbus->setValue(connector1["modbusAddress"].toInt());
+    counterOn->setChecked(connector1["meterEnabled"].toBool());
+    edtInterval->setValue(connector1["pollIntervalMs"].toInt());
+
+    //RGB
+    QJsonObject rgb = root["rgb"].toObject();
+    edtKol->setValue(rgb["currentLedCount"].toInt());
+    edtMaxKol->setValue(rgb["maxLedCount"].toInt());
+
+    //Вкл/выкл функций
+    QJsonObject features = root["features"].toObject();
+    edtCount->setCurrentText(features["meterType"].toString());
+    door->setChecked(features["doorState"].toBool());
+    stop->setChecked(features["emergencyStop"].toBool());
+    current->setChecked(features["leakSensorR01"].toBool());
+
+    QMessageBox::information(this, "Загружено", "Конфигурация успешно загружена");
+}
