@@ -143,6 +143,7 @@ CongigWindow::CongigWindow(QWidget *parent) : QWidget(parent) {
     row1Layout->addWidget(card3);
 
     configLayout->addLayout(row1Layout);
+    configLayout->addSpacing(20);
 
     //РЯД 2. лимиты и коннекторы
     QFrame *card4 = MainWindow::createCardWidget();
@@ -193,7 +194,7 @@ CongigWindow::CongigWindow(QWidget *parent) : QWidget(parent) {
     connectorWidget->setFrameShape(QFrame::NoFrame); // всё равно не работает нативно из-за стиля родителя — рисуем через QSS
 
     connectorWidget->setStyleSheet(
-            "QFrame { border: 1px solid #cccccc; background: #fcf6f6; margin-left: 10px; border-radius: 0px; }"
+            "QFrame { border: 1px solid #cccccc; background: #f5f5f5; margin-left: 10px; border-radius: 0px; }"
             "QLabel { border: none; color: #333333; background: transparent; font-size: 28px; }"
             "QCheckBox { border: none; padding: 4px; color: #333333; font-size: 26px; }"
             "QSpinBox { border: 1px solid #cccccc; border-radius: 4px; padding: 6px; background-color: #ffffff; color: #333333; font-size: 28px; }");
@@ -231,6 +232,7 @@ CongigWindow::CongigWindow(QWidget *parent) : QWidget(parent) {
     row2Layout->addWidget(card4, 1);
     row2Layout->addWidget(card5, 1);
     configLayout->addLayout(row2Layout);
+    configLayout->addSpacing(20);
 
     //РЯД 3. RGB
     QFrame *card6 = MainWindow::createCardWidget();
@@ -280,6 +282,7 @@ CongigWindow::CongigWindow(QWidget *parent) : QWidget(parent) {
     row3Layout->addWidget(card6, 1);
     row3Layout->addWidget(card7, 1);
     configLayout->addLayout(row3Layout);
+    configLayout->addSpacing(20);
 
     //кнопки
     btnLayout = new QHBoxLayout();

@@ -46,14 +46,13 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent)
 
     //правая чассть
     stackedWidget = new QStackedWidget(this);
-    page1 = new QLabel("<h1>Контент 1</h1>", this); page1->setAlignment(Qt::AlignCenter);
+    homePage = new homeWindow(this);
     CongigPage = new CongigWindow(this);
     page3 = new QLabel("<h1>Контент 3</h1>", this); page3->setAlignment(Qt::AlignCenter);
     page4 = new QLabel("<h1>Контент 4</h1>", this); page4->setAlignment(Qt::AlignCenter);
     page5 = new QLabel("<h1>Контент 5</h1>", this); page5->setAlignment(Qt::AlignCenter);
 
-    stackedWidget->addWidget(page1);
-    //stackedWidget->addWidget(homePage);
+    stackedWidget->addWidget(homePage);
     stackedWidget->addWidget(CongigPage);
     stackedWidget->addWidget(page3);
     stackedWidget->addWidget(page4);
@@ -67,6 +66,7 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent)
     listWidget->setCurrentRow(0);
 
     connect(CongigPage->idLineEdit(), SIGNAL(textChanged(QString)), this, SLOT(updateInfo()));
+    connect(CongigPage->locationLineEdit(), SIGNAL(textChanged(QString)), this, SLOT(updateInfo()));
     updateInfo();
 }
 
@@ -79,6 +79,12 @@ void MainWindow::updateInfo()
 
     idInfo->setText(QString("<span style='color:#000000;'>ID станции: </span>"
                             "<span style='color:#a80d22;font-weight: bold '>%1</span>").arg(displayId));
+    QString locationStr = CongigPage->location();
+        QString displayLoc = locationStr.isEmpty() ? "Не указана" : locationStr;
+
+        if (homePage) {
+            homePage->setNewLocation(displayLoc);
+        }
 }
 
 QFrame* MainWindow::createCardWidget()
@@ -88,18 +94,21 @@ QFrame* MainWindow::createCardWidget()
 
     card->setStyleSheet(
         "QFrame { background-color: #fcf9f9; border-radius: 10px; }"
-        "QLabel { border: none; color: #333333; font-size: 32px; margin-left: 30px; }"
-        "QLineEdit, QComboBox, QSpinBox { border: 1px solid #cccccc; border-radius: 4px; padding: 6px; background-color: #ffffff; color: #333333; font-size: 28px; margin-left: 45px;}"
+        "QLabel { border: none; color: #333333; font-size: 32px;  }"
+        "QLineEdit,QTextEdit, QComboBox, QSpinBox { border: 1px solid #cccccc; border-radius: 4px; padding: 6px; background-color: #ffffff; color: #333333; font-size: 28px; margin-left: 45px;}"
         "QLineEdit:focus, QComboBox:focus, QSpinBox:focus { border: 1px solid #0056b3; }"
         "QCheckBox { border: none; padding: 4px; color: #333333; font-size: 26px; margin-left: 45px; }"
         "QRadioButton { border: none; padding: 4px; color: #333333; font-size: 26px; margin-left: 40px; }"
         "QSpinBox::up-button, QSpinBox::down-button { border: none; background: transparent; }"
         "QComboBox QAbstractItemView {background-color: #ffffff; border: 1px solid #cccccc; }");
 
-    QGraphicsDropShadowEffect *shadow = new QGraphicsDropShadowEffect(card);
+    // ИСПРАВЛЕНИЕ: Создаем эффект тени БЕЗ указания (card) в скобках
+    QGraphicsDropShadowEffect *shadow = new QGraphicsDropShadowEffect();
     shadow->setBlurRadius(15);
     shadow->setOffset(3, 3);
     shadow->setColor(QColor(0, 0, 0, 100));
+
+    // Метод сам назначит родителя для shadow внутри Qt
     card->setGraphicsEffect(shadow);
 
     return card;

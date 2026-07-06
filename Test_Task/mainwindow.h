@@ -3,6 +3,7 @@
 
 #include <QtWidgets>
 #include "configuration.h"
+#include "home.h"
 
 class MainWindow : public QMainWindow
 {
@@ -23,6 +24,7 @@ private:
      QStackedWidget *stackedWidget;
 
      CongigWindow *CongigPage;
+     homeWindow *homePage;
 
 private slots:
     void updateInfo();

@@ -5,5 +5,13 @@
         <file>update.png</file>
         <file>diagnostis.png</file>
         <file>analytics.png</file>
+        <file>finishing.png</file>
+        <file>ok.png</file>
+        <file>unlock.png</file>
+        <file>lock.png</file>
+        <file>sinhr.png</file>
+        <file>total.png</file>
+        <file>error.png</file>
+        <file>failed.png</file>
     </qresource>
 </RCC>

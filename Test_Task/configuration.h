@@ -19,7 +19,8 @@ public:
     ~CongigWindow();
     QString stationId() const { return edtID->text(); }
     QLineEdit* idLineEdit() const { return edtID; }
-
+    QString location() const { return edtPlace->text(); }
+    QLineEdit* locationLineEdit() const { return edtPlace; }
 
 private:
 
