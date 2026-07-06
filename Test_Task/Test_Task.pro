@@ -10,11 +10,13 @@ CONFIG += c++11
 
 SOURCES += \
     configuration.cpp \
+    home.cpp \
     main.cpp \
     mainwindow.cpp
 
 HEADERS += \
     configuration.h \
+    home.h \
     mainwindow.h
 
 # Default rules for deployment.

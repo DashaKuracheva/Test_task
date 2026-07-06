@@ -22,9 +22,8 @@ public:
 
 
 private:
-     QFrame* createCardWidget();
 
-     QFrame *card, *connectorWidget;
+     QFrame *connectorWidget;
      QScrollArea *scrollArea;
      QWidget *configlWidget, *scrollContent;
      QHBoxLayout *row1Layout, *row2Layout, *row3Layout, *btnLayout;

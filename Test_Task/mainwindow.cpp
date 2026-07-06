@@ -81,3 +81,26 @@ void MainWindow::updateInfo()
                             "<span style='color:#a80d22;font-weight: bold '>%1</span>").arg(displayId));
 }
 
+QFrame* MainWindow::createCardWidget()
+{
+    QFrame *card = new QFrame();
+    card->setFrameShape(QFrame::NoFrame);
+
+    card->setStyleSheet(
+        "QFrame { background-color: #fcf9f9; border-radius: 10px; }"
+        "QLabel { border: none; color: #333333; font-size: 32px; margin-left: 30px; }"
+        "QLineEdit, QComboBox, QSpinBox { border: 1px solid #cccccc; border-radius: 4px; padding: 6px; background-color: #ffffff; color: #333333; font-size: 28px; margin-left: 45px;}"
+        "QLineEdit:focus, QComboBox:focus, QSpinBox:focus { border: 1px solid #0056b3; }"
+        "QCheckBox { border: none; padding: 4px; color: #333333; font-size: 26px; margin-left: 45px; }"
+        "QRadioButton { border: none; padding: 4px; color: #333333; font-size: 26px; margin-left: 40px; }"
+        "QSpinBox::up-button, QSpinBox::down-button { border: none; background: transparent; }"
+        "QComboBox QAbstractItemView {background-color: #ffffff; border: 1px solid #cccccc; }");
+
+    QGraphicsDropShadowEffect *shadow = new QGraphicsDropShadowEffect(card);
+    shadow->setBlurRadius(15);
+    shadow->setOffset(3, 3);
+    shadow->setColor(QColor(0, 0, 0, 100));
+    card->setGraphicsEffect(shadow);
+
+    return card;
+}

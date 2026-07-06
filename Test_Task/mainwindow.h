@@ -11,6 +11,7 @@ class MainWindow : public QMainWindow
 public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
+    static QFrame* createCardWidget();
 
 private:
      QWidget *centralWidget;

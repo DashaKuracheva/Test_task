@@ -1,10 +1,15 @@
-#include "configuration.h"
-#include "mainwindow.h"
-#include <QGraphicsDropShadowEffect>
+#include "home.h"
 
-CongigWindow::CongigWindow(QWidget *parent) : QWidget(parent) {
+home::home(QWidget *parent)
+    : QWidget{parent}
+{
 
-    outLayout = new QVBoxLayout(this);
+}
+
+
+
+
+  /*  outLayout = new QVBoxLayout(this);
     outLayout->setContentsMargins(0, 0, 0, 0);
 
     scrollArea = new QScrollArea(this);
@@ -25,7 +30,7 @@ CongigWindow::CongigWindow(QWidget *parent) : QWidget(parent) {
     row3Layout->setSpacing(15);
 
     //РЯД 1.сетевой интерфейс
-    QFrame *card1 = MainWindow::createCardWidget();
+    QFrame *card1 = createCardWidget();
     crd1= new QVBoxLayout(card1);
     lbl1 = new QLabel("Сетевой интерфейс");
     lbl1->setStyleSheet("font-size: 34px; font-weight: bold; border-bottom: 4px solid black; padding-bottom: 6px; margin-bottom: 8px;");
@@ -73,7 +78,7 @@ CongigWindow::CongigWindow(QWidget *parent) : QWidget(parent) {
     crd1->addStretch();
 
     //РЯД 1.станция
-    QFrame *card2 = MainWindow::createCardWidget();
+    QFrame *card2 = createCardWidget();
     crd2= new QVBoxLayout(card2);
     lbl2 = new QLabel("Станция");
     lbl2->setStyleSheet("font-size: 34px; font-weight: bold; border-bottom: 4px solid black; padding-bottom: 6px; margin-bottom: 8px;");
@@ -109,7 +114,7 @@ CongigWindow::CongigWindow(QWidget *parent) : QWidget(parent) {
     crd2->addStretch();
 
     //РЯД 1.соединение
-    QFrame *card3 = MainWindow::createCardWidget();
+    QFrame *card3 = createCardWidget();
     crd3= new QVBoxLayout(card3);
     lbl3 = new QLabel("Соединение");
     lbl3->setStyleSheet("font-size: 34px; font-weight: bold; border-bottom: 4px solid black; padding-bottom: 6px; margin-bottom: 8px;");
@@ -145,7 +150,7 @@ CongigWindow::CongigWindow(QWidget *parent) : QWidget(parent) {
     configLayout->addLayout(row1Layout);
 
     //РЯД 2. лимиты и коннекторы
-    QFrame *card4 = MainWindow::createCardWidget();
+    QFrame *card4 = createCardWidget();
     crd4= new QVBoxLayout(card4);
     lbl4 = new QLabel("Лимиты и коннекторы");
     lbl4->setStyleSheet("font-size: 34px; font-weight: bold; border-bottom: 4px solid black; padding-bottom: 6px; margin-bottom: 8px;");
@@ -182,7 +187,7 @@ CongigWindow::CongigWindow(QWidget *parent) : QWidget(parent) {
     crd4->addStretch();
 
     //РЯД 2. Настройки коннекторов
-    QFrame *card5 = MainWindow::createCardWidget();
+    QFrame *card5 = createCardWidget();
     crd5= new QVBoxLayout(card5);
     lbl5 = new QLabel("Настройки коннекторов");
     lbl5->setStyleSheet("font-size: 34px; font-weight: bold; border-bottom: 4px solid black; padding-bottom: 6px; margin-bottom: 8px; ");
@@ -233,7 +238,7 @@ CongigWindow::CongigWindow(QWidget *parent) : QWidget(parent) {
     configLayout->addLayout(row2Layout);
 
     //РЯД 3. RGB
-    QFrame *card6 = MainWindow::createCardWidget();
+    QFrame *card6 = createCardWidget();
     crd6= new QVBoxLayout(card6);
     lbl6 = new QLabel("RGB");
     lbl6->setStyleSheet("font-size: 34px; font-weight: bold; border-bottom: 4px solid black; padding-bottom: 6px; margin-bottom: 8px;");
@@ -257,7 +262,7 @@ CongigWindow::CongigWindow(QWidget *parent) : QWidget(parent) {
     crd6->addStretch();
 
     //РЯД 3. вкл/выкл
-    QFrame *card7 = MainWindow::createCardWidget();
+    QFrame *card7 = createCardWidget();
     crd7= new QVBoxLayout(card7);
     lbl7 = new QLabel("Включение/отключение функций");
     lbl7->setStyleSheet("font-size: 34px; font-weight: bold; border-bottom: 4px solid black; padding-bottom: 6px; margin-bottom: 8px;");
@@ -307,188 +312,6 @@ CongigWindow::CongigWindow(QWidget *parent) : QWidget(parent) {
     scrollArea->setWidget(scrollContent);
     outLayout->addWidget(scrollArea);
 }
+*/
+home::~home(){}
 
-CongigWindow::~CongigWindow(){}
-
-void CongigWindow::onSave()
-{
-    QJsonObject root;
-
-    //Сетевой интерфейс
-    QJsonObject network;
-    network["interface"] = g3->isChecked() ? "3G модем" : (lan->isChecked() ? "LAN" : "");
-    network["defaultInternet"] = internetBox->currentText();
-    network["wifiSSID"] = EDTwifiSSID->text();
-    network["wifiPASS"] = EDTwifiPASS->text();
-    root["network"] = network;
-
-    //Станция
-    QJsonObject station;
-    station["id"] = edtID->text();
-    station["serialNumber"] = edtSerialNum->text();
-    station["rowNumber"] = edtRowNum->text();
-    station["place"] = edtPlace->text();
-    root["station"] = station;
-
-    //Соединение
-    QJsonObject connection;
-    connection["ocppServer"] = edtServer->text();
-    connection["apn"] = edtApn->text();
-    connection["pin"] = edtPin->text();
-    root["connection"] = connection;
-
-    //Лимиты и коннекторы
-    QJsonObject limits;
-    limits["currentLimitA"] = edtLim->value();
-    limits["connectorCount"] = edtConnector->value();
-    limits["dynamicPowerDistribution"] = power->isChecked();
-    limits["mode"] = regimeBox->currentText();
-    limits["debugMode"] = debug->isChecked();
-    limits["cablePermanentlyAttached"] = cable->isChecked();
-    root["limits"] = limits;
-
-    //Настройки
-    QJsonObject connector1;
-    connector1["enabled"] = on->isChecked();
-    connector1["modbusAddress"] = edtModbus->value();
-    connector1["meterEnabled"] = counterOn->isChecked();
-    connector1["pollIntervalMs"] = edtInterval->value();
-    root["connector1"] = connector1;
-
-    //RGB
-    QJsonObject rgb;
-    rgb["currentLedCount"] = edtKol->value();
-    rgb["maxLedCount"] = edtMaxKol->value();
-    root["rgb"] = rgb;
-
-    //Вкл/выкл функций
-    QJsonObject features;
-    features["meterType"] = edtCount->currentText();
-    features["doorState"] = door->isChecked();
-    features["emergencyStop"] = stop->isChecked();
-    features["leakSensorR01"] = current->isChecked();
-    root["features"] = features;
-
-    //Запись в файл
-    QString defaultDir = QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation);
-    QString defaultPath = defaultDir + "/config.json";
-
-    QString filePath = QFileDialog::getSaveFileName(this, "Сохранить конфигурацию",defaultPath,"JSON файлы (*.json);;Все файлы (*)" );
-
-        if (filePath.isEmpty()) {
-            // Пользователь отменил диалог
-            return;
-        }
-
-        if (!filePath.endsWith(".json", Qt::CaseInsensitive)) {
-            filePath += ".json";
-        }
-
-        QFile file(filePath);
-        if (!file.open(QIODevice::WriteOnly | QIODevice::Text)) {
-            QMessageBox::warning(this, "Ошибка", "Не удалось открыть файл для записи:\n" + filePath);
-            return;
-        }
-
-        QJsonDocument doc(root);
-        file.write(doc.toJson(QJsonDocument::Indented));
-        file.close();
-
-        QMessageBox::information(this, "Сохранено", "Конфигурация сохранена:\n" + filePath);
-}
-
-void CongigWindow::onLoad()
-{
-    QString defaultDir = QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation);
-
-    QString filePath = QFileDialog::getOpenFileName(this, "Загрузить конфигурацию",defaultDir,"JSON файлы (*.json);;Все файлы (*)");
-
-    if (filePath.isEmpty()) {
-        // Пользователь отменил диалог
-        return;
-    }
-
-    QFile file(filePath);
-    if (!file.exists()) {
-        QMessageBox::warning(this, "Ошибка", "Файл конфигурации не найден:\n" + filePath);
-        return;
-    }
-
-    if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
-        QMessageBox::warning(this, "Ошибка", "Не удалось открыть файл для чтения:\n" + filePath);
-        return;
-    }
-
-    QByteArray data = file.readAll();
-    file.close();
-
-    QJsonParseError parseError;
-    QJsonDocument doc = QJsonDocument::fromJson(data, &parseError);
-
-    if (parseError.error != QJsonParseError::NoError) {
-        QMessageBox::warning(this, "Ошибка", "Ошибка разбора JSON:\n" + parseError.errorString());
-        return;
-    }
-
-    if (!doc.isObject()) {
-        QMessageBox::warning(this, "Ошибка", "Некорректный формат файла конфигурации");
-        return;
-    }
-
-    QJsonObject root = doc.object();
-
-    //Сетевой интерфейс
-    QJsonObject network = root["network"].toObject();
-    QString iface = network["interface"].toString();
-    if (iface == "3G модем") {
-        g3->setChecked(true);
-    } else if (iface == "LAN") {
-        lan->setChecked(true);
-    }
-    internetBox->setCurrentText(network["defaultInternet"].toString());
-    EDTwifiSSID->setText(network["wifiSSID"].toString());
-    EDTwifiPASS->setText(network["wifiPASS"].toString());
-
-    //Станция
-    QJsonObject station = root["station"].toObject();
-    edtID->setText(station["id"].toString());
-    edtSerialNum->setText(station["serialNumber"].toString());
-    edtRowNum->setText(station["rowNumber"].toString());
-    edtPlace->setText(station["place"].toString());
-
-    //Соединение
-    QJsonObject connection = root["connection"].toObject();
-    edtServer->setText(connection["ocppServer"].toString());
-    edtApn->setText(connection["apn"].toString());
-    edtPin->setText(connection["pin"].toString());
-
-    //Лимиты и коннекторы
-    QJsonObject limits = root["limits"].toObject();
-    edtLim->setValue(limits["currentLimitA"].toInt());
-    edtConnector->setValue(limits["connectorCount"].toInt());
-    power->setChecked(limits["dynamicPowerDistribution"].toBool());
-    regimeBox->setCurrentText(limits["mode"].toString());
-    debug->setChecked(limits["debugMode"].toBool());
-    cable->setChecked(limits["cablePermanentlyAttached"].toBool());
-
-    //Настройки
-    QJsonObject connector1 = root["connector1"].toObject();
-    on->setChecked(connector1["enabled"].toBool());
-    edtModbus->setValue(connector1["modbusAddress"].toInt());
-    counterOn->setChecked(connector1["meterEnabled"].toBool());
-    edtInterval->setValue(connector1["pollIntervalMs"].toInt());
-
-    //RGB
-    QJsonObject rgb = root["rgb"].toObject();
-    edtKol->setValue(rgb["currentLedCount"].toInt());
-    edtMaxKol->setValue(rgb["maxLedCount"].toInt());
-
-    //Вкл/выкл функций
-    QJsonObject features = root["features"].toObject();
-    edtCount->setCurrentText(features["meterType"].toString());
-    door->setChecked(features["doorState"].toBool());
-    stop->setChecked(features["emergencyStop"].toBool());
-    current->setChecked(features["leakSensorR01"].toBool());
-
-    QMessageBox::information(this, "Загружено", "Конфигурация успешно загружена");
-}
