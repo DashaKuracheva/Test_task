@@ -1,4 +1,5 @@
 #include "configuration.h"
+#include <QGraphicsDropShadowEffect>
 
 CongigWindow::CongigWindow(QWidget *parent) : QWidget(parent) {
 
@@ -23,7 +24,7 @@ CongigWindow::CongigWindow(QWidget *parent) : QWidget(parent) {
     row3Layout->setSpacing(15);
 
     //РЯД 1.сетевой интерфейс
-    QWidget *card1 = createCardWidget();
+    QFrame *card1 = createCardWidget();
     crd1= new QVBoxLayout(card1);
     lbl1 = new QLabel("Сетевой интерфейс");
     lbl1->setStyleSheet("font-size: 34px; font-weight: bold; border-bottom: 4px solid black; padding-bottom: 6px; margin-bottom: 8px;");
@@ -71,7 +72,7 @@ CongigWindow::CongigWindow(QWidget *parent) : QWidget(parent) {
     crd1->addStretch();
 
     //РЯД 1.станция
-    QWidget *card2 = createCardWidget();
+    QFrame *card2 = createCardWidget();
     crd2= new QVBoxLayout(card2);
     lbl2 = new QLabel("Станция");
     lbl2->setStyleSheet("font-size: 34px; font-weight: bold; border-bottom: 4px solid black; padding-bottom: 6px; margin-bottom: 8px;");
@@ -107,7 +108,7 @@ CongigWindow::CongigWindow(QWidget *parent) : QWidget(parent) {
     crd2->addStretch();
 
     //РЯД 1.соединение
-    QWidget *card3 = createCardWidget();
+    QFrame *card3 = createCardWidget();
     crd3= new QVBoxLayout(card3);
     lbl3 = new QLabel("Соединение");
     lbl3->setStyleSheet("font-size: 34px; font-weight: bold; border-bottom: 4px solid black; padding-bottom: 6px; margin-bottom: 8px;");
@@ -143,7 +144,7 @@ CongigWindow::CongigWindow(QWidget *parent) : QWidget(parent) {
     configLayout->addLayout(row1Layout);
 
     //РЯД 2. лимиты и коннекторы
-    QWidget *card4 = createCardWidget();
+    QFrame *card4 = createCardWidget();
     crd4= new QVBoxLayout(card4);
     lbl4 = new QLabel("Лимиты и коннекторы");
     lbl4->setStyleSheet("font-size: 34px; font-weight: bold; border-bottom: 4px solid black; padding-bottom: 6px; margin-bottom: 8px;");
@@ -180,18 +181,21 @@ CongigWindow::CongigWindow(QWidget *parent) : QWidget(parent) {
     crd4->addStretch();
 
     //РЯД 2. Настройки коннекторов
-    QWidget *card5 = createCardWidget();
+    QFrame *card5 = createCardWidget();
     crd5= new QVBoxLayout(card5);
     lbl5 = new QLabel("Настройки коннекторов");
     lbl5->setStyleSheet("font-size: 34px; font-weight: bold; border-bottom: 4px solid black; padding-bottom: 6px; margin-bottom: 8px; ");
     crd5->addWidget(lbl5);
 
     // Внутренний контейнер
-    connectorWidget = new QWidget();
-    connectorWidget->setStyleSheet("QWidget { border: 1px solid #e0e0e0; border-radius: 4px; background: #fafafa;margin-left: 10px; }  "
-                                   "QLabel { border: none; color: #333333; background: transparent; font-size: 28px; }"
-                                   "QCheckBox { border: none; padding: 4px; color: #333333; font-size: 26px; }"
-                                   "QSpinBox { border:1px solid #cccccc; border-radius: 4px; padding: 6px; background-color: #ffffff; color: #333333; font-size: 28px; }");
+    connectorWidget = new QFrame();
+    connectorWidget->setFrameShape(QFrame::NoFrame); // всё равно не работает нативно из-за стиля родителя — рисуем через QSS
+
+    connectorWidget->setStyleSheet(
+            "QFrame { border: 1px solid #cccccc; background: #fcf6f6; margin-left: 10px; border-radius: 0px; }"
+            "QLabel { border: none; color: #333333; background: transparent; font-size: 28px; }"
+            "QCheckBox { border: none; padding: 4px; color: #333333; font-size: 26px; }"
+            "QSpinBox { border: 1px solid #cccccc; border-radius: 4px; padding: 6px; background-color: #ffffff; color: #333333; font-size: 28px; }");
 
     Vconnector = new QVBoxLayout(connectorWidget);
 
@@ -228,7 +232,7 @@ CongigWindow::CongigWindow(QWidget *parent) : QWidget(parent) {
     configLayout->addLayout(row2Layout);
 
     //РЯД 3. RGB
-    QWidget *card6 = createCardWidget();
+    QFrame *card6 = createCardWidget();
     crd6= new QVBoxLayout(card6);
     lbl6 = new QLabel("RGB");
     lbl6->setStyleSheet("font-size: 34px; font-weight: bold; border-bottom: 4px solid black; padding-bottom: 6px; margin-bottom: 8px;");
@@ -252,7 +256,7 @@ CongigWindow::CongigWindow(QWidget *parent) : QWidget(parent) {
     crd6->addStretch();
 
     //РЯД 3. вкл/выкл
-    QWidget *card7 = createCardWidget();
+    QFrame *card7 = createCardWidget();
     crd7= new QVBoxLayout(card7);
     lbl7 = new QLabel("Включение/отключение функций");
     lbl7->setStyleSheet("font-size: 34px; font-weight: bold; border-bottom: 4px solid black; padding-bottom: 6px; margin-bottom: 8px;");
@@ -285,7 +289,7 @@ CongigWindow::CongigWindow(QWidget *parent) : QWidget(parent) {
     load = new QPushButton("Загрузить конфигурацию");
 
     QString buttonStyle =
-        "QPushButton { border: 2px solid #000000; background-color: grey; color: white; border-radius: 4px; padding: 10px 36px; font-size: 34px}"
+        "QPushButton { border: 2px solid #000000; background-color: grey; color: white; border-radius: 20px; padding: 20px 50px; font-size: 38px}"
         "QPushButton:hover {background-color: #5c6373 }"
         "QPushButton:pressed {background-color: black }";
 
@@ -305,11 +309,13 @@ CongigWindow::CongigWindow(QWidget *parent) : QWidget(parent) {
 
 CongigWindow::~CongigWindow(){}
 
-QWidget* CongigWindow::createCardWidget()
+QFrame* CongigWindow::createCardWidget()
 {
-    card = new QWidget();
+    card = new QFrame();
+    card->setFrameShape(QFrame::NoFrame);
+
     card->setStyleSheet(
-        "QWidget { border: 1px solid #000000; background-color: #fcf9f9; border-radius: 10px; }"
+        "QFrame { background-color: #fcf9f9; border-radius: 10px; }"
         "QLabel { border: none; color: #333333; font-size: 32px; margin-left: 30px; }"
         "QLineEdit, QComboBox, QSpinBox { border: 1px solid #cccccc; border-radius: 4px; padding: 6px; background-color: #ffffff; color: #333333; font-size: 28px; margin-left: 45px;}"
         "QLineEdit:focus, QComboBox:focus, QSpinBox:focus { border: 1px solid #0056b3; }"
@@ -317,6 +323,13 @@ QWidget* CongigWindow::createCardWidget()
         "QRadioButton { border: none; padding: 4px; color: #333333; font-size: 26px; margin-left: 40px; }"
         "QSpinBox::up-button, QSpinBox::down-button { border: none; background: transparent; }"
         "QComboBox QAbstractItemView {background-color: #ffffff; border: 1px solid #cccccc; }");
+
+    QGraphicsDropShadowEffect *shadow = new QGraphicsDropShadowEffect(card);
+    shadow->setBlurRadius(15);
+    shadow->setOffset(3, 3);
+    shadow->setColor(QColor(0, 0, 0, 100));
+    card->setGraphicsEffect(shadow);
+
     return card;
 }
 

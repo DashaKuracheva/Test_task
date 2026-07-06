@@ -22,10 +22,11 @@ public:
 
 
 private:
-     QWidget* createCardWidget();
+     QFrame* createCardWidget();
 
+     QFrame *card, *connectorWidget;
      QScrollArea *scrollArea;
-     QWidget *configlWidget, *connectorWidget, *scrollContent, *card;
+     QWidget *configlWidget, *scrollContent;
      QHBoxLayout *row1Layout, *row2Layout, *row3Layout, *btnLayout;
      QVBoxLayout *configLayout,*outLayout, *crd1, *crd2, * crd3, *crd4, *crd5, *crd6, *crd7, *Vconnector;
      // заголовкии
