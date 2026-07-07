@@ -50,13 +50,13 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent)
     CongigPage = new CongigWindow(this);
     page3 = new QLabel("<h1>Контент 3</h1>", this); page3->setAlignment(Qt::AlignCenter);
     page4 = new QLabel("<h1>Контент 4</h1>", this); page4->setAlignment(Qt::AlignCenter);
-    page5 = new QLabel("<h1>Контент 5</h1>", this); page5->setAlignment(Qt::AlignCenter);
+    analyticsPage = new analyticsWindow(this);
 
     stackedWidget->addWidget(homePage);
     stackedWidget->addWidget(CongigPage);
     stackedWidget->addWidget(page3);
     stackedWidget->addWidget(page4);
-    stackedWidget->addWidget(page5);
+    stackedWidget->addWidget(analyticsPage);
 
     mainLayout->addLayout(InfoLayout);
     mainLayout->addWidget(stackedWidget);

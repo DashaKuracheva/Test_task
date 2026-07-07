@@ -65,9 +65,9 @@ homeWindow::homeWindow(QWidget *parent): QWidget{parent}
     avgPower->setStyleSheet("QFrame { background-color: #f5f5f5; border-radius: 10px; }");
     avgPowerLayout = new QVBoxLayout(avgPower);
 
-    avgPowerTitle = new QLabel("Средняя мощность");
-    avgPowerTitle->setStyleSheet("color: #888888; font-size: 28px; border: none;");
-    avgPowerLayout->addWidget(avgPowerTitle);
+    avgPowerName = new QLabel("Средняя мощность");
+    avgPowerName->setStyleSheet("color: #888888; font-size: 28px; border: none;");
+    avgPowerLayout->addWidget(avgPowerName);
 
     avgPowerValue = new QLabel("5.77 кВт");
     avgPowerValue->setStyleSheet("font-size: 30px; font-weight: bold; border: none;");

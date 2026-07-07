@@ -4,6 +4,7 @@
 #include <QtWidgets>
 #include "configuration.h"
 #include "home.h"
+#include "analyticsWindow.h"
 
 class MainWindow : public QMainWindow
 {
@@ -25,6 +26,7 @@ private:
 
      CongigWindow *CongigPage;
      homeWindow *homePage;
+     analyticsWindow *analyticsPage;
 
 private slots:
     void updateInfo();
