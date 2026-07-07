@@ -48,13 +48,14 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent)
     stackedWidget = new QStackedWidget(this);
     homePage = new homeWindow(this);
     CongigPage = new CongigWindow(this);
-    page3 = new QLabel("<h1>Контент 3</h1>", this); page3->setAlignment(Qt::AlignCenter);
+    diagnosticsPage = new DiagnosticsWindow (this);
+
     page4 = new QLabel("<h1>Контент 4</h1>", this); page4->setAlignment(Qt::AlignCenter);
     analyticsPage = new analyticsWindow(this);
 
     stackedWidget->addWidget(homePage);
     stackedWidget->addWidget(CongigPage);
-    stackedWidget->addWidget(page3);
+    stackedWidget->addWidget(diagnosticsPage);
     stackedWidget->addWidget(page4);
     stackedWidget->addWidget(analyticsPage);
 

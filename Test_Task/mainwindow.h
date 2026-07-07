@@ -5,6 +5,7 @@
 #include "configuration.h"
 #include "home.h"
 #include "analyticsWindow.h"
+#include "diagnostisWindow.h"
 
 class MainWindow : public QMainWindow
 {
@@ -27,6 +28,7 @@ private:
      CongigWindow *CongigPage;
      homeWindow *homePage;
      analyticsWindow *analyticsPage;
+     DiagnosticsWindow *diagnosticsPage;
 
 private slots:
     void updateInfo();

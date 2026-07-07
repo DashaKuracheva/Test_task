@@ -447,32 +447,6 @@ homeWindow::homeWindow(QWidget *parent): QWidget{parent}
     row2->addWidget(cardHome4);
     crd4Layout->addStretch();
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 //РЯД 3. Последняя сессия
 
     QFrame *cardHome5 = MainWindow::createCardWidget();

@@ -12,6 +12,7 @@ CONFIG += c++11
 SOURCES += \
     analyticsWindow.cpp \
     configuration.cpp \
+    diagnostisWIndow.cpp \
     home.cpp \
     main.cpp \
     mainwindow.cpp \
@@ -20,6 +21,7 @@ SOURCES += \
 HEADERS += \
     analyticsWindow.h \
     configuration.h \
+    diagnostisWindow.h \
     home.h \
     mainwindow.h \
     qcustomplot.h
