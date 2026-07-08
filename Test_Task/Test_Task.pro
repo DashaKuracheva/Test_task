@@ -16,7 +16,8 @@ SOURCES += \
     home.cpp \
     main.cpp \
     mainwindow.cpp \
-    qcustomplot.cpp
+    qcustomplot.cpp \
+    update.cpp
 
 HEADERS += \
     analyticsWindow.h \
@@ -24,7 +25,8 @@ HEADERS += \
     diagnostisWindow.h \
     home.h \
     mainwindow.h \
-    qcustomplot.h
+    qcustomplot.h \
+    update.h
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

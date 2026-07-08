@@ -352,7 +352,7 @@ QWidget *DiagnosticsWindow::createNetworkTab()
     networkLayout->addWidget(modeComboBox);
 
     applyBtn = new QPushButton("Применить режим");
-    connect(applyBtn, SIGNAL(clicked()), this, SLOT(applyNetwork()));
+    connect(applyBtn, SIGNAL(clicked()), this, SLOT(applyNetworkA()));
     applyBtn->setStyleSheet(
         "QPushButton { background-color: #2f80ed; color: white; border-radius: 10px; padding: 15px 20px; font-size: 28px; }"
         "QPushButton:hover { background-color: #2569c4; }"

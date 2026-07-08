@@ -6,6 +6,7 @@
 #include "home.h"
 #include "analyticsWindow.h"
 #include "diagnostisWindow.h"
+#include "update.h"
 
 class MainWindow : public QMainWindow
 {
@@ -29,6 +30,7 @@ private:
      homeWindow *homePage;
      analyticsWindow *analyticsPage;
      DiagnosticsWindow *diagnosticsPage;
+     updateWindow *updatePage;
 
 private slots:
     void updateInfo();

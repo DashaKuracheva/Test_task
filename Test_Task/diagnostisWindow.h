@@ -1,17 +1,7 @@
 #ifndef DIAGNOSTISWINDOW_H
 #define DIAGNOSTISWINDOW_H
 
-#include <QWidget>
-#include <QTabWidget>
-#include <QVBoxLayout>
-#include <QHBoxLayout>
-#include <QGridLayout>
-#include <QLabel>
-#include <QFrame>
-#include <QPushButton>
-#include <QProgressBar>
-#include <QComboBox>
-#include <QCheckBox>
+#include <QtWidgets>
 
 class DiagnosticsWindow : public QWidget
 {
