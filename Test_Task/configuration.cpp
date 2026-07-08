@@ -49,8 +49,8 @@ CongigWindow::CongigWindow(QWidget *parent) : QWidget(parent) {
     LAN->setStyleSheet("font-style: italic; font-size: 24px;color: black");
     crd1->addWidget(LAN);
 
-    internet = new QLabel("Интернет по умолчанию");
-    crd1->addWidget(internet);
+    internetCon = new QLabel("Интернет по умолчанию");
+    crd1->addWidget(internetCon);
 
     internetBox = new QComboBox();
     internetBox->addItems({"3G модем", "LAN", "Wi-Fi"});
