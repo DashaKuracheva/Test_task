@@ -32,7 +32,7 @@ private:
      // заголовкии
      QLabel *lbl1, *lbl2, * lbl3, *lbl4, *lbl5, *lbl6, *lbl7, *lblConnector;
      //сетевой инт
-     QLabel *interface, *wifiPASS, * wifiSSID, *internetCon, *LAN;
+     QLabel *interfaceLBL, *wifiPASS, * wifiSSID, *internetCon, *LAN;
      QLineEdit *EDTwifiSSID, *EDTwifiPASS;
      //станция
      QLabel *id, *serialNum, * rowNum, *place;

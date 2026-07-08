@@ -31,8 +31,8 @@ CongigWindow::CongigWindow(QWidget *parent) : QWidget(parent) {
     lbl1->setStyleSheet("font-size: 34px; font-weight: bold; border-bottom: 4px solid black; padding-bottom: 6px; margin-bottom: 8px;");
     crd1->addWidget(lbl1);
 
-    interface = new QLabel("Включённые интерфейсы:");
-    crd1->addWidget(interface);
+    interfaceLBL = new QLabel("Включённые интерфейсы:");
+    crd1->addWidget(interfaceLBL);
 
     g3 = new QRadioButton("3G модем");
     crd1->addWidget(g3);
